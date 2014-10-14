@@ -40,7 +40,6 @@ post '/' do
     puts e.message
   end
   redirect '/'
-  #haml :success
 end
 
 get '/:shortened' do
