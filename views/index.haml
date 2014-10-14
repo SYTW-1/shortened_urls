@@ -1,0 +1,4 @@
+%ol
+  - @list.each do |url|
+    %li 
+      %a{:href=>"#{address}/#{url.id}"} #{url.url}

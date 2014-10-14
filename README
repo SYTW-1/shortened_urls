@@ -1,0 +1,51 @@
+SCREENCASTS
+A URL shortener in Ruby with Sinatra
+
+https://github.com/janko-m/sinatra-activerecord
+http://screencasts.org/episodes/activerecord-with-sinatra
+
+
+See also:
+    http://screencasts.org/episodes/configuring-activerecord-in-sinatra
+
+We have used sinatra-activerecord (see https://github.com/janko-m/sinatra-activerecord)
+run:
+     rake -I. -T
+ or in the Rakefile 
+     require './app'
+
+It was fundamental:
+
+      set :database, 'sqlite3:///shortened_urls.db'
+
+to run the creation migration.
+
+        [12:25][~/Dropbox/src/ruby/STW/sinatra-faq/activerecord]$ rake db:migrate
+        ==  CreateShortenedUrls: migrating ============================================
+        -- create_table(:shortened_urls)
+           -> 0.0009s
+        -- add_index(:shortened_urls, :url)
+           -> 0.0003s
+        ==  CreateShortenedUrls: migrated (0.0023s) ===================================
+
+        [12:30][~/Dropbox/src/ruby/STW/sinatra-faq/activerecord]$ tree
+        .
+        |--Gemfile
+        |--Gemfile.lock
+        |--README
+        |--Rakefile
+        |--app.rb
+        |--db
+        |  |--config.yml
+        |  `--migrate
+        |     `--20120923104239_create_shortened_urls.rb
+        `--shortened_urls.db
+`
+
+
+Simple Sinatra ActiveRecord App with Migration
+http://www.brandon-harris.com/sinatra/2010/03/28/simple-sinatra-activerecord-app-with-migrations.html
+
+
+Ruby ActiveRecord and MySQL
+http://rubylearning.com/satishtalim/ruby_activerecord_and_mysql.html
