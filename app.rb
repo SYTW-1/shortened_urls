@@ -4,15 +4,27 @@ require 'sinatra'
 require 'sinatra/reloader' if development?
 require 'haml'
 require 'uri'
-require 'data_mapper'
-require_relative 'model'
 require 'pp'
+#require 'socket'
+require 'data_mapper'
 
-require 'socket'
+DataMapper.setup( :default, ENV['DATABASE_URL'] || 
+                            "sqlite3://#{Dir.pwd}/my_shortened_urls.db" )
+DataMapper::Logger.new($stdout, :debug)
+DataMapper::Model.raise_on_save_failure = true 
+
+require_relative 'model'
+
+DataMapper.finalize
+
+#DataMapper.auto_migrate!
+DataMapper.auto_upgrade!
+
 
 get '/' do
   puts "inside get '/': #{params}"
-  @list = ShortenedUrl.all(:order => [ :id.desc ], :limit => 20)
+  @list = ShortenedUrl.all(:order => [ :id.asc ], :limit => 20)
+  # in SQL => SELECT * FROM "ShortenedUrl" ORDER BY "id" ASC
   haml :index
 end
 
@@ -21,7 +33,7 @@ post '/' do
   uri = URI::parse(params[:url])
   if uri.is_a? URI::HTTP or uri.is_a? URI::HTTPS then
     begin
-      @short_url = ShortenedUrl.create(:url => params[:url])
+      @short_url = ShortenedUrl.first_or_create(:url => params[:url])
     rescue Exception => e
       puts "EXCEPTION!!!!!!!!!!!!!!!!!!!"
       pp @short_url
