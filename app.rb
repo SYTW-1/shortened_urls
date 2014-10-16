@@ -20,6 +20,7 @@ DataMapper.finalize
 #DataMapper.auto_migrate!
 DataMapper.auto_upgrade!
 
+Base = 36
 
 get '/' do
   puts "inside get '/': #{params}"
@@ -47,7 +48,7 @@ end
 
 get '/:shortened' do
   puts "inside get '/:shortened': #{params}"
-  short_url = ShortenedUrl.first(:id => params[:shortened])
+  short_url = ShortenedUrl.first(:id => params[:shortened].to_i(Base))
 
   # HTTP status codes that start with 3 (such as 301, 302) tell the
   # browser to go look for that resource in another location. This is
