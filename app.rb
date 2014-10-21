@@ -38,7 +38,7 @@ DataMapper.auto_upgrade!
 Base = 36
 
 get '/' do
-  puts "inside get '/': #{params}"
+  #puts "inside get '/': #{params}"
   #@list = ShortenedUrl.all(:order => [ :id.asc ], :limit => 20)
   # in SQL => SELECT * FROM "ShortenedUrl" ORDER BY "id" ASC
   @list = nil
