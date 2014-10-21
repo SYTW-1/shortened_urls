@@ -38,13 +38,11 @@ DataMapper.auto_upgrade!
 Base = 36
 
 get '/' do
-  #puts "inside get '/': #{params}"
-  #@list = ShortenedUrl.all(:order => [ :id.asc ], :limit => 20)
+  puts "inside get '/': #{params}"
+  @list = ShortenedUrl.all(:order => [ :id.asc ], :limit => 20)
   # in SQL => SELECT * FROM "ShortenedUrl" ORDER BY "id" ASC
-  #@list = nil
   haml :index
 end
-
 
 get '/auth/:name/callback' do
   @auth = request.env['omniauth.auth']
@@ -68,5 +66,16 @@ post '/' do
   redirect '/'
 end
 
+get '/:shortened' do
+  puts "inside get '/:shortened': #{params}"
+  short_url = ShortenedUrl.first(:urlshort => params[:shortened])
+
+  # HTTP status codes that start with 3 (such as 301, 302) tell the
+  # browser to go look for that resource in another location. This is
+  # used in the case where a web page has moved to another location or
+  # is no longer at the original location. The two most commonly used
+  # redirection status codes are 301 Move Permanently and 302 Found.
+  redirect short_url.url, 301
+end
 
 error do haml :index end
