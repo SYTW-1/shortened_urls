@@ -9,8 +9,14 @@ require 'data_mapper'
 require 'omniauth-oauth2'
 require 'omniauth-google-oauth2'
 
-DataMapper.setup( :default, ENV['DATABASE_URL'] || 
-                            "sqlite3://#{Dir.pwd}/my_shortened_urls.db" )
+configure :development do
+    DataMapper.setup(:default, "sqlite3://#{Dir.pwd}/development.db")
+end
+
+configure :production do
+  DataMapper.setup(:default, ENV['DATABASE_URL'])
+end
+
 DataMapper::Logger.new($stdout, :debug)
 DataMapper::Model.raise_on_save_failure = true 
 
