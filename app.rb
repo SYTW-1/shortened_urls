@@ -17,11 +17,6 @@ end
 enable :sessions
 set :session_secret, '*&(^#234a)'
 
-get '/auth/:name/callback' do
-  @auth = request.env['omniauth.auth']
-  haml :index
-end
-
 configure :development do
     DataMapper.setup(:default, "sqlite3://#{Dir.pwd}/development.db")
 end
@@ -46,6 +41,12 @@ get '/' do
   puts "inside get '/': #{params}"
   @list = ShortenedUrl.all(:order => [ :id.asc ], :limit => 20)
   # in SQL => SELECT * FROM "ShortenedUrl" ORDER BY "id" ASC
+  haml :index
+end
+
+
+get '/auth/:name/callback' do
+  @auth = request.env['omniauth.auth']
   haml :index
 end
 
