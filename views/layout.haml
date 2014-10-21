@@ -1,8 +1,15 @@
 !!!
 %html
+    %head
+        %link{:type => "text/css", :rel => "stylesheet", :href => "https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"}
+        %link{:type => "text/css", :rel => "stylesheet", :href => "https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"}
+        %script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js")
     %body
-        =yield
-        %form(action="/" method="POST")
-            %label(for="url")
-            %input(type="text" name="url" id="myurl" autofocus size=100 accesskey="s")
-            %input(type="submit" value="Shorten")
+        .container
+            .page-header
+                %a.btn.btn-danger.btn-lg.pull-right{:href=>'/auth/google_oauth2'} Sign In
+                .jumbotron
+                    %h1 Acortador de URL's
+                    %h2 Guarda tus URL's con tu cuenta de Google
+            %h1 Últimas URL's agregadas por todos los usuarios.
+            =yield
