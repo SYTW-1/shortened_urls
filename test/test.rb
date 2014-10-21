@@ -1,10 +1,10 @@
 ENV['RACK_ENV'] = 'test'
 require 'minitest/autorun'
 require 'rack/test'
-
 require 'bundler/setup'
 require 'sinatra'
 require 'data_mapper'
+require_relative '../app.rb'
 
 
 include Rack::Test::Methods
@@ -28,5 +28,5 @@ DataMapper.finalize
 DataMapper.auto_upgrade!
 
 describe "shortened urls" do
-	
+
 end
