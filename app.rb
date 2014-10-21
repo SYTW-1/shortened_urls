@@ -1,4 +1,4 @@
-#!/usr/bin/env rubynv ruby
+#!/usr/bin/env ruby
 require 'rubygems'
 require 'sinatra'
 require 'sinatra/reloader' if development?
@@ -8,6 +8,19 @@ require 'pp'
 require 'data_mapper'
 require 'omniauth-oauth2'
 require 'omniauth-google-oauth2'
+
+use OmniAuth::Builder do
+  config = YAML.load_file 'config/config.yml'
+  provider :google_oauth2, config['identifier'], config['secret']
+end
+
+enable :sessions
+set :session_secret, '*&(^#234a)'
+
+get '/auth/:name/callback' do
+  @auth = request.env['omniauth.auth']
+  haml :index
+end
 
 configure :development do
     DataMapper.setup(:default, "sqlite3://#{Dir.pwd}/development.db")
@@ -41,7 +54,7 @@ post '/' do
   uri = URI::parse(params[:url])
   if uri.is_a? URI::HTTP or uri.is_a? URI::HTTPS then
     begin
-      @short_url = ShortenedUrl.first_or_create(:url => params[:url])
+      @short_url = ShortenedUrl.first_or_create(:url => params[:url], :urlshort => params[:urlshort])
     rescue Exception => e
       puts "EXCEPTION!!!!!!!!!!!!!!!!!!!"
       pp @short_url
@@ -55,7 +68,7 @@ end
 
 get '/:shortened' do
   puts "inside get '/:shortened': #{params}"
-  short_url = ShortenedUrl.first(:id => params[:shortened].to_i(Base))
+  short_url = ShortenedUrl.first(:urlshort => params[:shortened])
 
   # HTTP status codes that start with 3 (such as 301, 302) tell the
   # browser to go look for that resource in another location. This is
