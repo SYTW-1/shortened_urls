@@ -1,12 +1,13 @@
-#!/usr/bin/env ruby
+#!/usr/bin/env rubynv ruby
 require 'rubygems'
 require 'sinatra'
 require 'sinatra/reloader' if development?
 require 'haml'
 require 'uri'
 require 'pp'
-#require 'socket'
 require 'data_mapper'
+require 'omniauth-oauth2'
+require 'omniauth-google-oauth2'
 
 DataMapper.setup( :default, ENV['DATABASE_URL'] || 
                             "sqlite3://#{Dir.pwd}/my_shortened_urls.db" )
