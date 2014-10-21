@@ -41,7 +41,7 @@ get '/' do
   puts "inside get '/': #{params}"
   #@list = ShortenedUrl.all(:order => [ :id.asc ], :limit => 20)
   # in SQL => SELECT * FROM "ShortenedUrl" ORDER BY "id" ASC
-  @list = []
+  @list = nil
   haml :index
 end
 
