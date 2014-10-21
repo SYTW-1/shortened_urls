@@ -9,14 +9,6 @@ require 'data_mapper'
 require 'omniauth-oauth2'
 require 'omniauth-google-oauth2'
 
-use OmniAuth::Builder do
-  config = YAML.load_file 'config/config.yml'
-  provider :google_oauth2, config['identifier'], config['secret']
-end
-
-enable :sessions
-set :session_secret, '*&(^#234a)'
-
 get '/auth/:name/callback' do
   @auth = request.env['omniauth.auth']
   haml :index
