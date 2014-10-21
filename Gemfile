@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 gem 'data_mapper'
 gem 'sinatra-contrib'
 gem 'haml'
-gem 'omniauth-oauth2'
+gem 'omniauth'
 gem 'omniauth-google-oauth2'
 
 group :production do
