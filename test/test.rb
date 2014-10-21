@@ -28,5 +28,5 @@ DataMapper.finalize
 DataMapper.auto_upgrade!
 
 describe "shortened urls" do
-
+	
 end
