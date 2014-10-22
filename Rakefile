@@ -16,4 +16,3 @@ desc "Use the filled client_secrets"
     task :use_keys do
       sh "cp config/config_filled.yml config/config.yml"
 end
-

@@ -25,6 +25,10 @@ configure :production do
   DataMapper.setup(:default, ENV['DATABASE_URL'])
 end
 
+configure :test do
+  DataMapper.setup(:default, "sqlite3://#{Dir.pwd}/test.db")
+end
+
 DataMapper::Logger.new($stdout, :debug)
 DataMapper::Model.raise_on_save_failure = true 
 
@@ -37,6 +41,9 @@ DataMapper.auto_upgrade!
 
 Base = 36
 
+get '/index' do
+  haml :index
+end
 
 get '/' do
   puts "inside get '/': #{params}"
