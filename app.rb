@@ -48,6 +48,7 @@ end
 get '/auth/:name/callback' do
   @auth = request.env['omniauth.auth']
   session[:uid] = @auth['uid'];
+  session[:name] = @auth['info'].first_name
   @list = ShortenedUrl.all(:uid => session[:uid])
   haml :user
 end
@@ -55,6 +56,10 @@ end
 get '/session' do
   @list = ShortenedUrl.all(:uid => session[:uid])
   haml :user
+end
+get '/logout' do
+  session.clear
+  redirect '/'
 end
 
 get '/delete' do
