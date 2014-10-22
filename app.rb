@@ -9,11 +9,6 @@ require 'data_mapper'
 require 'omniauth-oauth2'
 require 'omniauth-google-oauth2'
 
-get '/auth/:name/callback' do
-  @auth = request.env['omniauth.auth']
-  haml :index
-end
-
 use OmniAuth::Builder do
   config = YAML.load_file 'config/config.yml'
   provider :google_oauth2, config['identifier'], config['secret']
@@ -41,6 +36,7 @@ DataMapper.finalize
 DataMapper.auto_upgrade!
 
 Base = 36
+
 
 get '/' do
   puts "inside get '/': #{params}"
