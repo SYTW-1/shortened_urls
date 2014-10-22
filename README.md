@@ -30,8 +30,8 @@ See
 
 Siga los siguientes pasos:
 
-1) sudo apt-get install libpq-dev
-2) gem install pg
-3) sudo apt-get install postgresql
-4) sudo apt-get install postgresql-server-dev-9.3
-3) https://www.heroku.com/postgres
+* sudo apt-get install libpq-dev
+* gem install pg
+* sudo apt-get install postgresql
+* sudo apt-get install postgresql-server-dev-9.3
+* https://www.heroku.com/postgres
