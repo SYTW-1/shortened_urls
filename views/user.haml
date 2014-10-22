@@ -1,0 +1,6 @@
+%h1 #{@auth['info'].first_name}
+%ol
+  - @list.each do |url|
+    %li 
+      #{url.url} 
+      %a{:href=>"/#{url.urlshort}"} (#{url.urlshort})

@@ -37,6 +37,8 @@ DataMapper.auto_upgrade!
 
 Base = 36
 
+
+
 get '/' do
   puts "inside get '/': #{params}"
   @list = ShortenedUrl.all(:order => [ :id.asc ], :limit => 20)
@@ -46,7 +48,19 @@ end
 
 get '/auth/:name/callback' do
   @auth = request.env['omniauth.auth']
-  haml :index
+  session[:uid] = @auth['uid'];
+  @list = ShortenedUrl.all(:uid => session[:uid])
+  haml :user
+end
+
+get '/session' do
+  @list = ShortenedUrl.all(:uid => session[:uid])
+  haml :user
+end
+
+get '/delete' do
+  ShortenedUrl.all.destroy
+  redirect '/'
 end
 
 post '/' do
@@ -54,7 +68,7 @@ post '/' do
   uri = URI::parse(params[:url])
   if uri.is_a? URI::HTTP or uri.is_a? URI::HTTPS then
     begin
-      @short_url = ShortenedUrl.first_or_create(:url => params[:url], :urlshort => params[:urlshort])
+      @short_url = ShortenedUrl.first_or_create(:uid => session[:uid], :url => params[:url], :urlshort => params[:urlshort])
     rescue Exception => e
       puts "EXCEPTION!!!!!!!!!!!!!!!!!!!"
       pp @short_url
@@ -63,7 +77,7 @@ post '/' do
   else
     logger.info "Error! <#{params[:url]}> is not a valid URL"
   end
-  redirect '/'
+  redirect '/session'
 end
 
 get '/:shortened' do
