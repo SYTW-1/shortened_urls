@@ -14,6 +14,14 @@ get '/auth/:name/callback' do
   haml :index
 end
 
+use OmniAuth::Builder do
+  config = YAML.load_file 'config/config.yml'
+  provider :google_oauth2, config['identifier'], config['secret']
+end
+
+enable :sessions
+set :session_secret, '*&(^#234a)'
+
 configure :development do
     DataMapper.setup(:default, "sqlite3://#{Dir.pwd}/development.db")
 end
@@ -41,12 +49,29 @@ get '/' do
   haml :index
 end
 
+get '/auth/:name/callback' do
+  @auth = request.env['omniauth.auth']
+  session[:uid] = @auth['uid'];
+  @list = ShortenedUrl.all(:uid => session[:uid])
+  haml :user
+end
+
+get '/session' do
+  @list = ShortenedUrl.all(:uid => session[:uid])
+  haml :user
+end
+
+get '/delete' do
+  ShortenedUrl.all.destroy
+  redirect '/'
+end
+
 post '/' do
   puts "inside post '/': #{params}"
   uri = URI::parse(params[:url])
   if uri.is_a? URI::HTTP or uri.is_a? URI::HTTPS then
     begin
-      @short_url = ShortenedUrl.first_or_create(:url => params[:url], :urlshort => params[:urlshort])
+      @short_url = ShortenedUrl.first_or_create(:uid => session[:uid], :url => params[:url], :urlshort => params[:urlshort])
     rescue Exception => e
       puts "EXCEPTION!!!!!!!!!!!!!!!!!!!"
       pp @short_url
@@ -55,7 +80,7 @@ post '/' do
   else
     logger.info "Error! <#{params[:url]}> is not a valid URL"
   end
-  redirect '/'
+  redirect '/session'
 end
 
 get '/:shortened' do

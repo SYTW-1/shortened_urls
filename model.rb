@@ -9,4 +9,3 @@ class ShortenedUrl
   property :url, Text
   property :urlshort, Text
 end
-
