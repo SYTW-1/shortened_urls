@@ -39,10 +39,14 @@ Base = 36
 
 
 get '/' do
-  puts "inside get '/': #{params}"
-  @list = ShortenedUrl.all(:order => [ :id.desc ], :limit => 20)
-  # in SQL => SELECT * FROM "ShortenedUrl" ORDER BY "id" ASC
-  haml :index
+  if !session[:uid]
+    puts "inside get '/': #{params}"
+    @list = ShortenedUrl.all(:order => [ :id.desc ], :limit => 20)
+    # in SQL => SELECT * FROM "ShortenedUrl" ORDER BY "id" ASC
+    haml :index
+  else
+    redirect '/session'
+  end
 end
 
 get '/auth/:name/callback' do

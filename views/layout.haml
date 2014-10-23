@@ -7,7 +7,10 @@
     %body
         .container
             .page-header
-                %a.btn.btn-danger.btn-lg.pull-right{:href=>'/auth/google_oauth2'} Sign In
+                - if !session[:uid]
+                    %a.btn.btn-success.btn-lg.pull-right{:href=>'/auth/google_oauth2'} Sign In
+                -else
+                    %a.btn.btn-danger.btn-lg.pull-right{:href=>'/logout'} Sign Out
                 .jumbotron
                     %h1 Acortador de URL's
                     %h2 Guarda tus URL's con tu cuenta de Google
