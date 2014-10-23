@@ -95,7 +95,7 @@ post '/' do
   uri = URI::parse(params[:url])
   if uri.is_a? URI::HTTP or uri.is_a? URI::HTTPS then
     begin
-      sh = (params[:urlshort] != nil) ? params[:urlshort] : (ShortenedUrl.count+1)
+      sh = (params[:urlshort] != '') ? params[:urlshort] : (ShortenedUrl.count+1)
       @short_url = ShortenedUrl.first_or_create(:uid => session[:uid], :email => session[:email], :url => params[:url], :urlshort => sh)
     rescue Exception => e
       puts "EXCEPTION!!!!!!!!!!!!!!!!!!!"
