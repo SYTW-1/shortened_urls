@@ -53,6 +53,7 @@ get '/auth/:name/callback' do
   @auth = request.env['omniauth.auth']
   session[:uid] = @auth['uid'];
   session[:name] = @auth['info'].first_name
+  session[:email] = @auth['info'].email
   @list = ShortenedUrl.all(:uid => session[:uid])
   haml :user
 end
@@ -76,7 +77,7 @@ post '/' do
   uri = URI::parse(params[:url])
   if uri.is_a? URI::HTTP or uri.is_a? URI::HTTPS then
     begin
-      @short_url = ShortenedUrl.first_or_create(:uid => session[:uid], :url => params[:url], :urlshort => params[:urlshort])
+      @short_url = ShortenedUrl.first_or_create(:uid => session[:uid], :email => session[:email], :url => params[:url], :urlshort => params[:urlshort])
     rescue Exception => e
       puts "EXCEPTION!!!!!!!!!!!!!!!!!!!"
       pp @short_url
@@ -85,7 +86,11 @@ post '/' do
   else
     logger.info "Error! <#{params[:url]}> is not a valid URL"
   end
-  redirect '/session'
+  if !session[:uid]
+    redirect '/'
+  else
+    redirect 'session'
+  end
 end
 
 get '/:shortened' do

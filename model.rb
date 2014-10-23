@@ -6,6 +6,7 @@ class ShortenedUrl
 
   property :id, Serial
   property :uid, String
+  property :email, String
   property :url, Text
   property :urlshort, Text
 end
