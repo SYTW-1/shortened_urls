@@ -64,13 +64,8 @@ get '/auth/:name/callback' do
   @auth = request.env['omniauth.auth']
   session[:plt] = params[:name]
   session[:uid] = @auth['uid'];
-  if params[:name] == 'google_oauth2'
-    session[:name] = @auth['info'].first_name + @auth['info'].last_name
-    session[:email] = @auth['info'].email
-  elsif params[:name] == 'github' || params[:name] == 'facebook'
-    session[:name] = @auth['name']
-    session[:email] = @auth['email']
-  end
+  session[:name] = @auth['info'].first_name + @auth['info'].last_name
+  session[:email] = @auth['info'].email
   @list = ShortenedUrl.all(:uid => session[:uid])
   haml :user
 end
