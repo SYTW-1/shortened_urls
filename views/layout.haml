@@ -9,7 +9,9 @@
         .container
             .page-header
                 - if !session[:uid]
-                    %a.btn.btn-success.btn-lg.pull-right{:href=>'/auth/google_oauth2'} Sign In
+                    %a.btn.btn-success.btn-lg.pull-right{:href=>'/auth/google_oauth2'} Sign In with google
+                    %a.btn.btn-success.btn-lg.pull-right{:href=>'/auth/github'} Sign In with github
+                    %a.btn.btn-success.btn-lg.pull-right{:href=>'/auth/facebook'} Sign In with facebook
                 -else
                     %a.btn.btn-danger.btn-lg.pull-right{:href=>'/logout'} Sign Out
                 .jumbotron

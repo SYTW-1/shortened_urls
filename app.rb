@@ -8,10 +8,14 @@ require 'pp'
 require 'data_mapper'
 require 'omniauth-oauth2'
 require 'omniauth-google-oauth2'
+require 'omniauth-github'
+require 'omniauth-facebook'
 
 use OmniAuth::Builder do
   config = YAML.load_file 'config/config.yml'
   provider :google_oauth2, config['identifier'], config['secret']
+  provider :github, config['identifier_github'], config['secret_github']
+  provider :facebook, config['identifier_facebook'], config['secret_facebook']
 end
 
 enable :sessions

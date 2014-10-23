@@ -8,6 +8,8 @@ gem 'sinatra-contrib'
 gem 'haml'
 gem 'omniauth'
 gem 'omniauth-google-oauth2'
+gem 'omniauth-github'
+gem 'omniauth-facebook'
 gem 'pry' 
 gem 'erubis'
 
