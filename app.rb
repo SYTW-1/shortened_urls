@@ -67,10 +67,10 @@ get '/logout' do
   redirect 'https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=' + to('/')
 end
 
-get '/delete' do
-  ShortenedUrl.all.destroy
-  redirect '/'
-end
+#get '/delete' do
+#  ShortenedUrl.all.destroy
+#  redirect '/'
+#end
 
 post '/' do
   puts "inside post '/': #{params}"
