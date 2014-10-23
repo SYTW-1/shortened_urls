@@ -25,7 +25,9 @@
                         Crea nuevas URLs aunque no hayas iniciado sesión
                 - else
                     .panel-heading
-                        Crea nuevas URLs con tu usuario
+                        Crea nuevas URLs con tu usuario de
+                        %strong
+                            #{session[:plt]}
                 .panel-body
                     %form(action="/" method="POST")
                         .input-group
