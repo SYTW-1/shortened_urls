@@ -68,8 +68,8 @@ get '/auth/:name/callback' do
     session[:name] = @auth['info'].first_name + " " + @auth['info'].last_name
     session[:email] = @auth['info'].email
   elsif params[:name] == 'github' 
-    session[:name] = @auth['name']
-    session[:email] = @auth['email']
+    session[:name] = @auth['info'].nickname
+    session[:email] = @auth['info'].email
   end
   @list = ShortenedUrl.all(:uid => session[:uid])
   haml :user
