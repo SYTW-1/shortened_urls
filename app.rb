@@ -64,7 +64,8 @@ get '/session' do
 end
 get '/logout' do
   session.clear
-  redirect 'https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=' + to('/')
+  #redirect 'https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=' + to('/')
+  redirect '/'
 end
 
 #get '/delete' do
