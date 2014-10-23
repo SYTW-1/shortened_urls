@@ -14,8 +14,12 @@
             %h1 Últimas URL's agregadas por todos los usuarios.
             =yield
             .panel.panel-info
-                .panel-heading
-                    Crea nuevas URLs aunque no hayas iniciado sesión
+                - if !session[:uid]
+                    .panel-heading
+                        Crea nuevas URLs aunque no hayas iniciado sesión
+                - else
+                    .panel-heading
+                        Crea nuevas URLs con tu usuario de Google
                 .panel-body
                     %form(action="/" method="POST")
                         .input-group
