@@ -62,7 +62,7 @@ end
 
 get '/auth/:name/callback' do
   @auth = request.env['omniauth.auth']
-  session[:plt] = params[:name]
+  session[:plt] = (params[:name] == 'google_oauth2') ? 'google' : params[:name]
   session[:uid] = @auth['uid'];
   if params[:name] == 'google_oauth2' || params[:name] == 'facebook'
     session[:name] = @auth['info'].first_name + " " + @auth['info'].last_name
@@ -95,7 +95,8 @@ post '/' do
   uri = URI::parse(params[:url])
   if uri.is_a? URI::HTTP or uri.is_a? URI::HTTPS then
     begin
-      @short_url = ShortenedUrl.first_or_create(:uid => session[:uid], :email => session[:email], :url => params[:url], :urlshort => params[:urlshort])
+      sh = (params[:urlshort] != nil) ? params[:urlshort] : (ShortenedUrl.count+1)
+      @short_url = ShortenedUrl.first_or_create(:uid => session[:uid], :email => session[:email], :url => params[:url], :urlshort => sh)
     rescue Exception => e
       puts "EXCEPTION!!!!!!!!!!!!!!!!!!!"
       pp @short_url
