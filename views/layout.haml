@@ -1,21 +1,38 @@
 !!!
 %html
     %head
+        %title Acortador de URLs
         %link{:type => "text/css", :rel => "stylesheet", :href => "https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"}
         %link{:type => "text/css", :rel => "stylesheet", :href => "https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"}
         %script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js")
     %body
         .container
             .page-header
-                %a.btn.btn-danger.btn-lg.pull-right{:href=>'/auth/google_oauth2'} Sign In
+                - if !session[:uid]
+                    %a.btn.btn-success.btn-lg.pull-right{:href=>'/auth/google_oauth2'} Sign In
+                -else
+                    %a.btn.btn-danger.btn-lg.pull-right{:href=>'/logout'} Sign Out
                 .jumbotron
                     %h1 Acortador de URL's
                     %h2 Guarda tus URL's con tu cuenta de Google
             %h1 Últimas URL's agregadas por todos los usuarios.
             =yield
-            %form(action="/" method="POST")
-                %label(for="url")
-                %input(type="text" name="url" id="myurl" autofocus size=100 accesskey="s")
-                %input(type="text" name="urlshort" id="myurlshort" autofocus size=100 accesskey="s")
-                %input(type="submit" value="Shorten")
+            .panel.panel-info
+                - if !session[:uid]
+                    .panel-heading
+                        Crea nuevas URLs aunque no hayas iniciado sesión
+                - else
+                    .panel-heading
+                        Crea nuevas URLs con tu usuario de Google
+                .panel-body
+                    %form(action="/" method="POST")
+                        .input-group
+                            %span.input-group-addon URL
+                            %input.form-control(type="text" name="url" id="myurl" autofocus size=100 accesskey="s" placeholder="Large URL")
+                        %br
+                        .input-group
+                            %span.input-group-addon URL
+                            %input.form-control(type="text" name="urlshort" id="myurlshort" autofocus size=100 accesskey="s" placeholder="Shortened URL")
+                        %br
+                        %input.btn.btn-success(type="submit" value="Shorten")
 

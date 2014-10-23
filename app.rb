@@ -46,16 +46,21 @@ get '/index' do
 end
 
 get '/' do
-  puts "inside get '/': #{params}"
-  @list = ShortenedUrl.all(:order => [ :id.asc ], :limit => 20)
-  # in SQL => SELECT * FROM "ShortenedUrl" ORDER BY "id" ASC
-  haml :index
+  if !session[:uid]
+    puts "inside get '/': #{params}"
+    @list = ShortenedUrl.all(:order => [ :id.desc ], :limit => 20)
+    # in SQL => SELECT * FROM "ShortenedUrl" ORDER BY "id" ASC
+    haml :index
+  else
+    redirect '/session'
+  end
 end
 
 get '/auth/:name/callback' do
   @auth = request.env['omniauth.auth']
   session[:uid] = @auth['uid'];
   session[:name] = @auth['info'].first_name
+  session[:email] = @auth['info'].email
   @list = ShortenedUrl.all(:uid => session[:uid])
   haml :user
 end
@@ -66,20 +71,21 @@ get '/session' do
 end
 get '/logout' do
   session.clear
+  #redirect 'https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=' + to('/')
   redirect '/'
 end
 
-get '/delete' do
-  ShortenedUrl.all.destroy
-  redirect '/'
-end
+#get '/delete' do
+#  ShortenedUrl.all.destroy
+#  redirect '/'
+#end
 
 post '/' do
   puts "inside post '/': #{params}"
   uri = URI::parse(params[:url])
   if uri.is_a? URI::HTTP or uri.is_a? URI::HTTPS then
     begin
-      @short_url = ShortenedUrl.first_or_create(:uid => session[:uid], :url => params[:url], :urlshort => params[:urlshort])
+      @short_url = ShortenedUrl.first_or_create(:uid => session[:uid], :email => session[:email], :url => params[:url], :urlshort => params[:urlshort])
     rescue Exception => e
       puts "EXCEPTION!!!!!!!!!!!!!!!!!!!"
       pp @short_url
@@ -88,7 +94,11 @@ post '/' do
   else
     logger.info "Error! <#{params[:url]}> is not a valid URL"
   end
-  redirect '/session'
+  if !session[:uid]
+    redirect '/'
+  else
+    redirect 'session'
+  end
 end
 
 get '/:shortened' do
