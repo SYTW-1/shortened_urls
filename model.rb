@@ -1,7 +1,5 @@
-configure :production do
-	require 'dm-core'
-	require 'dm-migrations'
-end
+require 'dm-core'
+require 'dm-migrations'
 
 class ShortenedUrl
   include DataMapper::Resource
